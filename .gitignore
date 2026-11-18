@@ -1,0 +1,16 @@
+node_modules/
+dist/
+coverage/
+output/
+playwright-report/
+test-results/
+.workbench/
+.env
+.env.*
+!.env.example
+*.log
+*.tsbuildinfo
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

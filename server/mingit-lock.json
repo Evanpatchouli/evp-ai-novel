@@ -1,0 +1,23 @@
+{
+  "version": "2.56.1.windows.1",
+  "archives": {
+    "x64": {
+      "file": "MinGit-2.56.1-64-bit.zip",
+      "sha256": "4a92850b6e917da4fd010669b614b55dccf5b0ec333a534cc4be4700dfefdafd",
+      "launcherSha256": "177bc8a9af84fa3a400c694c975fda731d048279c074e1a93947ce8b067ebb48",
+      "gitVersion": "2.56.1.windows.1"
+    },
+    "arm64": {
+      "file": "MinGit-2.56.1-arm64.zip",
+      "sha256": "96571e442e90523a90e5fd8661b4c4e43bc192910f3c6db938816e6955b4cc8c",
+      "launcherSha256": "afee584a5d832a2bb5fc376fe29304396436928e8cb2267f408c52cecaf2e9ab",
+      "gitVersion": "2.56.1.windows.1"
+    },
+    "ia32": {
+      "file": "MinGit-2.56.1-32-bit.zip",
+      "sha256": "e9b2c628c6d3bfc86405568d05979c605ee994172eb232cc4cbc4daf54425829",
+      "launcherSha256": "bd5d9b898bf5ef9322c77bb9cf17d6a68940982434f1a132c59486168f337bb1",
+      "gitVersion": "2.56.1.windows.1.dirty"
+    }
+  }
+}
