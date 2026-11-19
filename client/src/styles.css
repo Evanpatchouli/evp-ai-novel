@@ -307,6 +307,18 @@ code {
   backdrop-filter: blur(12px);
 }
 
+.utility-novels {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 6px;
+}
+
+.utility-create {
+  flex: none;
+  color: var(--muted);
+}
+
 .novel-picker-trigger {
   min-width: 0;
   display: inline-flex;

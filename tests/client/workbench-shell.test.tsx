@@ -19,31 +19,37 @@ import { WorkbenchShell } from "../../client/src/app/WorkbenchShell";
 
 afterEach(cleanup);
 
-it("空书库只提供一个新建入口，点击后打开小说表单", async () => {
-  vi.spyOn(api, "novels").mockResolvedValue({ novels: [], selectedId: null });
-  const user = userEvent.setup();
-  const router = createMemoryRouter([{ path: "/", Component: WorkbenchShell }]);
-  render(
-    <AppearanceProvider initialAppearance="plain">
-      <RouterProvider router={router} />
-    </AppearanceProvider>,
-  );
+it.each(["complementary", "main"] as const)(
+  "空书库的 %s 新建入口打开同一表单并恢复焦点",
+  async (landmark) => {
+    vi.spyOn(api, "novels").mockResolvedValue({ novels: [], selectedId: null });
+    const user = userEvent.setup();
+    const router = createMemoryRouter([
+      { path: "/", Component: WorkbenchShell },
+    ]);
+    render(
+      <AppearanceProvider initialAppearance="plain">
+        <RouterProvider router={router} />
+      </AppearanceProvider>,
+    );
 
-  await screen.findByText("书库中还没有小说");
-  const trigger = screen.getByRole("button", { name: "新建小说" });
-  expect(screen.getByRole("complementary").contains(trigger)).toBe(true);
-  const picker = screen.getByRole("button", { name: "当前小说" });
-  expect(picker.hasAttribute("disabled")).toBe(true);
-  expect(screen.queryByText(/^(未连接|等待读取|0 项未提交)$/)).toBeNull();
-  await user.click(trigger);
-  const title = within(screen.getByRole("dialog")).getByRole("textbox", {
-    name: "书名",
-  });
-  expect(document.activeElement).toBe(title);
-  await user.keyboard("{Escape}");
-  expect(screen.queryByRole("dialog")).toBeNull();
-  expect(document.activeElement).toBe(trigger);
-});
+    await screen.findByText("书库中还没有小说");
+    const trigger = within(screen.getByRole(landmark)).getByRole("button", {
+      name: "新建小说",
+    });
+    const picker = screen.getByRole("button", { name: "当前小说" });
+    expect(picker.hasAttribute("disabled")).toBe(true);
+    expect(screen.queryByText(/^(未连接|等待读取|0 项未提交)$/)).toBeNull();
+    await user.click(trigger);
+    const title = within(screen.getByRole("dialog")).getByRole("textbox", {
+      name: "书名",
+    });
+    expect(document.activeElement).toBe(title);
+    await user.keyboard("{Escape}");
+    expect(screen.queryByRole("dialog")).toBeNull();
+    expect(document.activeElement).toBe(trigger);
+  },
+);
 
 it("主视图在跳转时回到顶部，并在前进后退时恢复各自的滚动位置", async () => {
   vi.spyOn(api, "novels").mockResolvedValue({ novels: [], selectedId: null });

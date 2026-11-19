@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 import { Button, Chip, Dialog, Form, Icon, Input } from "@ldkj/web-ui";
 import type { ManagedNovel } from "../api";
 import { Textarea } from "../components/Textarea";
@@ -75,6 +75,10 @@ function WorkbenchLayout() {
       : { tone: "success", message: `已永久删除《${novel.title}》。` });
     if (deletingSelected) setReturnHome(true);
   };
+  const openCreateNovel = (event: MouseEvent<HTMLButtonElement>) => {
+    createTrigger.current = event.currentTarget;
+    setCreateOpen(true);
+  };
   const createNovel = async () => {
     if (!title.trim() || !author.trim() || !(await requestDiscard())) return;
     setCreating(true);
@@ -137,10 +141,7 @@ function WorkbenchLayout() {
           rounded="md"
           aria-haspopup="dialog"
           aria-expanded={createOpen}
-          onClick={(event) => {
-            createTrigger.current = event.currentTarget;
-            setCreateOpen(true);
-          }}
+          onClick={openCreateNovel}
         >
           <Icon name="add" size={18} />
           新建小说
@@ -148,14 +149,28 @@ function WorkbenchLayout() {
       </aside>
       <main className="main-shell">
         <div className="utility-bar">
-          <NovelPicker
-            novels={session.novels}
-            selectedId={session.selectedId}
-            disabled={session.loading || session.repositoryBusy}
-            hasUnsavedChanges={hasUnsavedChanges}
-            onSelect={(id) => void selectRepository(id)}
-            onDelete={deleteNovel}
-          />
+          <div className="utility-novels">
+            <NovelPicker
+              novels={session.novels}
+              selectedId={session.selectedId}
+              disabled={session.loading || session.repositoryBusy}
+              hasUnsavedChanges={hasUnsavedChanges}
+              onSelect={(id) => void selectRepository(id)}
+              onDelete={deleteNovel}
+            />
+            <Button
+              type="button"
+              className="utility-create"
+              variant="ghost"
+              size="icon"
+              aria-label="新建小说"
+              title="新建小说"
+              aria-haspopup="dialog"
+              onClick={openCreateNovel}
+            >
+              <Icon name="add" size={18} />
+            </Button>
+          </div>
           <div className="utility-actions">
             <AppearanceSelect />
             {git && (
